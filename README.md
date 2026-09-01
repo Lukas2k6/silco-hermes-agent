@@ -33,10 +33,12 @@ The installer backs up an existing `%LOCALAPPDATA%\hermes\SOUL.md` before replac
    iex (irm https://hermes-agent.nousresearch.com/install.ps1)
    ```
 
-2. Open a new PowerShell window and clone this private repository:
+2. Open a new PowerShell window, install GitHub CLI, authorize the replacement PC, and clone this private repository:
 
    ```powershell
-   git clone https://github.com/Lukas2k6/silco-hermes-agent.git
+   winget install --id GitHub.cli -e
+   gh auth login
+   gh repo clone Lukas2k6/silco-hermes-agent
    cd silco-hermes-agent
    ```
 
