@@ -36,7 +36,7 @@ The installer backs up an existing `%LOCALAPPDATA%\hermes\SOUL.md` before replac
 2. Open a new PowerShell window and clone this private repository:
 
    ```powershell
-   git clone https://github.com/YOUR_USERNAME/silco-hermes-agent.git
+   git clone https://github.com/Lukas2k6/silco-hermes-agent.git
    cd silco-hermes-agent
    ```
 
@@ -130,4 +130,3 @@ GitHub tracks reproducible intent; encrypted backups preserve private state.
 | documentation | full `hermes backup` archives |
 
 See `SECURITY.md` before adding files.
-
