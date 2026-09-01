@@ -33,35 +33,32 @@ The installer backs up an existing `%LOCALAPPDATA%\hermes\SOUL.md` before replac
    iex (irm https://hermes-agent.nousresearch.com/install.ps1)
    ```
 
-2. Open a new PowerShell window, install GitHub CLI, authorize the replacement PC, and clone this private repository:
+2. Download this repository as a ZIP while signed in to GitHub: open the repository page, select **Code → Download ZIP**, and extract it. GitHub CLI is not required.
 
-   ```powershell
-   winget install --id GitHub.cli -e
-   gh auth login
-   gh repo clone Lukas2k6/silco-hermes-agent
-   cd silco-hermes-agent
-   ```
+   Alternatively, use the `silco-hermes-agent-ready.zip` supplied in the original Codex chat and transfer it to the bot PC.
 
-3. Apply the tracked personality and safe configuration:
+3. Open PowerShell inside the extracted folder. In File Explorer, open the folder, click the address bar, type `powershell`, and press Enter.
+
+4. Apply the tracked personality and safe configuration:
 
    ```powershell
    Set-ExecutionPolicy -Scope Process Bypass
    .\scripts\Install-Silco.ps1
    ```
 
-4. Select a model that is currently offered. Free model catalogs change, so do not hardcode an old model name:
+5. Select a model that is currently offered. Free model catalogs change, so do not hardcode an old model name:
 
    ```powershell
    hermes model
    ```
 
-5. Restore Discord credentials through Hermes's interactive setup:
+6. Restore Discord credentials through Hermes's interactive setup:
 
    ```powershell
    hermes gateway setup
    ```
 
-6. Register and start the Windows gateway:
+7. Register and start the Windows gateway:
 
    ```powershell
    hermes gateway install
