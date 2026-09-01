@@ -1,0 +1,26 @@
+# Safe settings managed by scripts/Install-Silco.ps1.
+# This is a reference fragment, not a replacement for your complete config.yaml.
+# Model/provider choices and credentials are deliberately omitted.
+
+discord:
+  require_mention: true
+  auto_thread: false
+  typing_indicator: false
+  reactions: true
+  history_backfill: true
+  history_backfill_limit: 50
+
+group_sessions_per_user: true
+
+display:
+  tool_progress: new
+  runtime_footer:
+    enabled: true
+    fields:
+      - model
+      - context_pct
+      - latency
+
+updates:
+  pre_update_backup: full
+

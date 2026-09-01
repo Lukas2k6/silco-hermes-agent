@@ -1,0 +1,30 @@
+# Never commit Hermes credentials or runtime state.
+.env
+.env.*
+!.env.example
+config.yaml
+auth/
+credentials/
+sessions/
+logs/
+pairing/
+cron/
+state.db*
+gateway*.json
+gateway*.pid
+gateway*.lock
+*.token
+*.key
+*.pem
+
+# Hermes backups contain credentials.
+backups/
+*.zip
+
+# Local overrides and editor files.
+AGENTS.override.md
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
