@@ -43,8 +43,13 @@ The installer backs up an existing `%LOCALAPPDATA%\hermes\SOUL.md` before replac
 
    ```powershell
    Set-ExecutionPolicy -Scope Process Bypass
-   .\scripts\Install-Silco.ps1
+   .\scripts\Install-Silco.ps1 -RestartGateway
    ```
+
+   The installer detects Hermes's active config directory, installs `SOUL.md`
+   there, and disables any built-in personality overlay. In Discord, run
+   `/personality none` and then `/reset` once so an existing conversation does
+   not retain the old default voice.
 
 5. Select a model that is currently offered. Free model catalogs change, so do not hardcode an old model name:
 
@@ -106,6 +111,15 @@ git pull
 ```
 
 New Discord conversations will use the updated identity. Reset an existing conversation with `/reset` if it still carries older conversational momentum.
+
+If the bot still sounds generic, verify the active installation:
+
+```powershell
+.\scripts\Verify-Silco.ps1
+```
+
+The output must show both `PASS: Silco personality matches the repository` and
+`PASS: No competing Hermes personality overlay is active`.
 
 ## Live monitoring
 

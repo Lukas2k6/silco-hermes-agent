@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [string]$HermesHome = (Join-Path $env:LOCALAPPDATA 'hermes'),
+    [string]$HermesHome,
     [switch]$RestartGateway
 )
 
@@ -29,8 +29,23 @@ and run this script again:
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $sourceSoul = Join-Path $repoRoot 'SOUL.md'
-$targetSoul = Join-Path $HermesHome 'SOUL.md'
 $hermes = Get-HermesExecutable
+
+# Ask Hermes which home/config it is actually using. This matters when
+# HERMES_HOME was customized; copying to LOCALAPPDATA would then have no effect.
+if ([string]::IsNullOrWhiteSpace($HermesHome)) {
+    $configPath = (& $hermes config path 2>&1 | Select-Object -Last 1 | Out-String).Trim()
+    if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($configPath)) {
+        $HermesHome = Split-Path -Parent $configPath
+    }
+    else {
+        $HermesHome = Join-Path $env:LOCALAPPDATA 'hermes'
+    }
+}
+
+$HermesHome = [System.IO.Path]::GetFullPath($HermesHome)
+$env:HERMES_HOME = $HermesHome
+$targetSoul = Join-Path $HermesHome 'SOUL.md'
 
 if (-not (Test-Path -LiteralPath $sourceSoul)) {
     throw "Canonical SOUL.md was not found at $sourceSoul"
@@ -49,6 +64,9 @@ Copy-Item -LiteralPath $sourceSoul -Destination $targetSoul -Force
 Write-Host "Installed Silco personality at $targetSoul"
 
 $settings = [ordered]@{
+    # A selected built-in personality is injected after SOUL.md and can make
+    # the bot sound like the default character. "none" leaves SOUL.md in charge.
+    'display.personality'                    = 'none'
     'discord.require_mention'                 = 'true'
     'discord.auto_thread'                     = 'false'
     'discord.typing_indicator'                = 'false'
@@ -90,14 +108,16 @@ if ($LASTEXITCODE -ne 0) {
 
 if ($RestartGateway) {
     Write-Host 'Restarting the Hermes gateway...'
-    & $hermes gateway restart
-    if ($LASTEXITCODE -ne 0) {
-        Write-Warning 'Gateway restart failed. Try: schtasks /Run /TN Hermes_Gateway'
-    }
+    & $hermes gateway stop
+    Start-Sleep -Seconds 2
+    & schtasks.exe /Run /TN Hermes_Gateway
+    Start-Sleep -Seconds 3
+    & $hermes gateway status --deep -l
 }
 
 Write-Host ''
 Write-Host 'Silco is installed.' -ForegroundColor Green
+Write-Host 'In Discord, run /personality none and then /reset once.'
 Write-Host 'Credentials are intentionally not stored in this repository.'
 Write-Host 'On a fresh machine, finish with:'
 Write-Host '  hermes model'
